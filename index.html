@@ -19,16 +19,25 @@
   <link rel="stylesheet" href="css/styles.css" />
   <title>Something Dating</title>
   <script>
-    // Apply theme before paint to avoid flash. Saved choice > OS preference.
+    // Apply theme + locale before paint. Saved choice > OS preference > defaults.
     (function () {
       try {
-        var saved = localStorage.getItem("theme");
-        var theme = saved === "dark" || saved === "light"
-          ? saved
+        var savedTheme = localStorage.getItem("theme");
+        var theme = savedTheme === "dark" || savedTheme === "light"
+          ? savedTheme
           : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
         document.documentElement.setAttribute("data-theme", theme);
       } catch (_) {
         document.documentElement.setAttribute("data-theme", "light");
+      }
+      try {
+        var savedLoc = localStorage.getItem("locale");
+        var loc = (savedLoc === "en" || savedLoc === "pt")
+          ? savedLoc
+          : ((navigator.language || "en").slice(0, 2).toLowerCase() === "pt" ? "pt" : "en");
+        document.documentElement.setAttribute("lang", loc);
+      } catch (_) {
+        document.documentElement.setAttribute("lang", "en");
       }
     })();
   </script>
@@ -38,28 +47,28 @@
   <!-- Install instructions modal -->
   <div class="modal-backdrop hidden" id="install-modal">
     <div class="modal">
-      <div class="modal-title">Add to Home screen</div>
+      <div class="modal-title" data-i18n="general.install.modalTitle">Add to Home screen</div>
       <div class="modal-steps" id="modal-steps"></div>
-      <button class="btn-modal-close" id="btn-modal-close">Got it</button>
+      <button class="btn-modal-close" id="btn-modal-close" data-i18n="general.install.modalClose">Got it</button>
     </div>
   </div>
 
   <header>
-    <button class="btn-chevron" id="btn-chevron" aria-label="Back">
+    <button class="btn-chevron" id="btn-chevron" data-i18n-aria="general.aria.back" aria-label="Back">
       <!-- lucide: chevron-left -->
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
     </button>
     <div class="home-header" id="home-header">
-      <h1 class="home-title"><span class="title-line-top">Something about</span><span class="title-word-dating">Dating</span></h1>
-      <p class="home-subtitle">A step-by-step guide, by Adam Something</p>
+      <h1 class="home-title"><span class="title-line-top" data-i18n="general.home.titleTop">Something about</span><span class="title-word-dating" data-i18n="general.home.titleWord">Dating</span></h1>
+      <p class="home-subtitle" data-i18n="general.home.subtitle">A step-by-step guide, by Adam Something</p>
     </div>
     <div id="install-banner" class="install-banner" style="display:none">
       <div class="install-banner-icon">📲</div>
       <div class="install-banner-text">
-        <strong>Add to Home screen</strong>
-        <span>Use offline, like a native app</span>
+        <strong data-i18n="general.install.bannerTitle">Add to Home screen</strong>
+        <span data-i18n="general.install.bannerSubtitle">Use offline, like a native app</span>
       </div>
-      <button class="install-banner-dismiss" id="btn-dismiss-banner" aria-label="Dismiss">
+      <button class="install-banner-dismiss" id="btn-dismiss-banner" data-i18n-aria="general.aria.dismiss" aria-label="Dismiss">
         <!-- lucide: x -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
@@ -78,7 +87,7 @@
         </div>
         <div class="section-card-footer">
           <span data-slot="steps"></span>
-          <span class="section-card-cta">Start <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
+          <span class="section-card-cta"><span data-i18n="general.home.start">Start</span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
         </div>
       </div>
       <div class="section-card" data-section="meeting">
@@ -88,7 +97,7 @@
         </div>
         <div class="section-card-footer">
           <span data-slot="steps"></span>
-          <span class="section-card-cta">Start <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
+          <span class="section-card-cta"><span data-i18n="general.home.start">Start</span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
         </div>
       </div>
       <div class="section-card" data-section="dating">
@@ -98,7 +107,7 @@
         </div>
         <div class="section-card-footer">
           <span data-slot="steps"></span>
-          <span class="section-card-cta">Start <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
+          <span class="section-card-cta"><span data-i18n="general.home.start">Start</span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
         </div>
       </div>
       <div class="section-card" data-section="keeping">
@@ -108,14 +117,14 @@
         </div>
         <div class="section-card-footer">
           <span data-slot="steps"></span>
-          <span class="section-card-cta">Start <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
+          <span class="section-card-cta"><span data-i18n="general.home.start">Start</span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span>
         </div>
       </div>
     </div>
-    <p class="home-footer-msg">Take your time with each phase. Great relationships are built step by step.</p>
+    <p class="home-footer-msg" data-i18n="general.home.footerMsg">Take your time with each phase. Great relationships are built step by step.</p>
     <div class="home-meta">
       <div class="home-meta-row">
-        <button class="theme-switch" id="btn-theme" type="button" role="switch" aria-label="Toggle theme">
+        <button class="theme-switch" id="btn-theme" type="button" role="switch" data-i18n-aria="general.aria.theme" aria-label="Toggle theme">
           <span class="theme-switch-track">
             <span class="theme-switch-icon theme-switch-icon-sun" aria-hidden="true">
               <!-- lucide: sun -->
@@ -128,7 +137,7 @@
             <span class="theme-switch-thumb" aria-hidden="true"></span>
           </span>
         </button>
-        <a href="#credits" class="btn-credits">Credits</a>
+        <a href="#credits" class="btn-credits" data-i18n="general.home.credits">Credits</a>
       </div>
       <div id="app-version" data-slot="version"></div>
     </div>
@@ -196,21 +205,21 @@
   <template id="tpl-wip">
     <div class="wip-card">
       <div class="wip-title" data-slot="title"></div>
-      <p class="wip-sub">This section is still being written. Check back soon.</p>
+      <p class="wip-sub" data-i18n="general.wizard.wipSub">This section is still being written. Check back soon.</p>
     </div>
   </template>
 
   <footer>
     <div class="wizard-nav" id="wizard-nav">
-      <button class="wizard-btn-restart" id="btn-restart" aria-label="Restart">
+      <button class="wizard-btn-restart" id="btn-restart" data-i18n-aria="general.aria.restart" aria-label="Restart">
         <!-- lucide: undo-2 -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
       </button>
-      <button class="wizard-btn-prev" id="btn-prev" aria-label="Back">
+      <button class="wizard-btn-prev" id="btn-prev" data-i18n-aria="general.aria.back" aria-label="Back">
         <!-- lucide: x -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
-      <button class="wizard-btn-next" id="btn-next" aria-label="Next">
+      <button class="wizard-btn-next" id="btn-next" data-i18n-aria="general.aria.next" aria-label="Next">
         <!-- lucide: heart -->
         <svg id="btn-next-icon-heart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
         <!-- lucide: check -->

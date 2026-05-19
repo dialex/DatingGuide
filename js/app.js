@@ -3,6 +3,7 @@ import { setupInstallBanner } from "./install.js";
 import { setupThemeToggle } from "./theme.js";
 import { fitText } from "./fittext.js";
 import { renderMarkdown, renderInlineMarkdown } from "./markdown.js";
+import { initI18n, t, tPlural, applyDom } from "./i18n.js";
 
 let view = "home";
 let currentSectionId = null;
@@ -16,7 +17,9 @@ const elWizardNav   = () => $("wizard-nav");
 const elBtnChevron  = () => $("btn-chevron");
 
 function tpl(id) {
-  return $(id).content.cloneNode(true);
+  const node = $(id).content.cloneNode(true);
+  applyDom(node);
+  return node;
 }
 
 function renderHome() {
@@ -53,7 +56,11 @@ function renderHome() {
       image.style.setProperty("--c2", s.color[1]);
     }
     const steps = card.querySelector('[data-slot="steps"]');
-    if (steps) steps.textContent = s.steps ? `${s.steps.length} steps` : "Coming soon";
+    if (steps) {
+      steps.textContent = s.steps
+        ? tPlural("general.home.steps", s.steps.length)
+        : t("general.home.comingSoon");
+    }
     card.addEventListener("click", () => enterSection(id));
   });
 
@@ -98,7 +105,7 @@ function renderSection() {
   // Step badge
   const badge = node.querySelector('[data-slot="step-badge"]');
   badge.style.background = gradient;
-  badge.textContent = `Step ${stepIdx + 1} of ${total}`;
+  badge.textContent = t("general.wizard.stepOfTotal", { step: stepIdx + 1, total });
 
   // Step title + description
   node.querySelector('[data-slot="step-title"]').textContent = step.title;
@@ -693,6 +700,8 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+await initI18n();
+document.title = t("general.meta.docTitle");
 applyHash();
 
 // Fit the home title to its container so it never overflows on narrow viewports.
