@@ -51,11 +51,9 @@ function renderHome() {
     });
   }
 
-  // Reflect the active locale on the segmented toggle.
-  const active = getLocale();
-  home.querySelectorAll(".locale-switch-option").forEach((btn) => {
-    btn.setAttribute("aria-pressed", btn.dataset.locale === active ? "true" : "false");
-  });
+  // Reflect the active locale on the dropdown.
+  const localeSelect = home.querySelector(".locale-select");
+  if (localeSelect) localeSelect.value = getLocale();
 
   // Cards are declared statically in tpl-home (titles + images hardcoded).
   // Here we just wire each one to its phase data: gradient, steps count, click.
@@ -681,13 +679,13 @@ $("btn-chevron").addEventListener("click", goHome);
 setupInstallBanner();
 setupThemeToggle();
 
-// Locale toggle (delegated — the buttons live inside tpl-home and get
-// cloned on every home render). Re-render after switching so dynamic
-// strings (step counts, badge text) refresh in the new language.
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".locale-switch-option");
-  if (!btn) return;
-  const loc = btn.dataset.locale;
+// Locale dropdown (delegated — the <select> lives inside tpl-home and
+// gets cloned on every home render). Re-render after switching so
+// dynamic strings (step counts, badge text) refresh in the new language.
+document.addEventListener("change", (e) => {
+  const sel = e.target.closest(".locale-select");
+  if (!sel) return;
+  const loc = sel.value;
   if (loc && loc !== getLocale()) setLocale(loc);
 });
 

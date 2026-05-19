@@ -55,31 +55,29 @@ test.describe("i18n general namespace", () => {
     await ctx.close();
   });
 
-  test("locale toggle switches language and persists", async ({ browser }) => {
+  test("locale dropdown switches language and persists", async ({ browser }) => {
     const ctx = await browser.newContext({ locale: "en-US" });
     const page = await ctx.newPage();
     await page.goto("/");
     await page.locator(".section-grid").waitFor();
 
-    const en = page.locator('.locale-switch-option[data-locale="en"]');
-    const pt = page.locator('.locale-switch-option[data-locale="pt"]');
-    await expect(en).toHaveAttribute("aria-pressed", "true");
-    await expect(pt).toHaveAttribute("aria-pressed", "false");
+    const select = page.locator(".locale-select");
+    await expect(select).toHaveValue("en");
 
-    await pt.click();
+    await select.selectOption("pt");
     await expect(page.locator("html")).toHaveAttribute("lang", "pt");
     await expect(page.locator(".btn-credits")).toHaveText("Créditos");
-    await expect(pt).toHaveAttribute("aria-pressed", "true");
-    await expect(en).toHaveAttribute("aria-pressed", "false");
+    await expect(page.locator(".locale-select")).toHaveValue("pt");
 
     await page.reload();
     await page.locator(".section-grid").waitFor();
     await expect(page.locator("html")).toHaveAttribute("lang", "pt");
     await expect(page.locator(".btn-credits")).toHaveText("Créditos");
+    await expect(page.locator(".locale-select")).toHaveValue("pt");
     await ctx.close();
   });
 
-  test("locale toggle sits to the left of the theme switch", async ({ page }) => {
+  test("locale dropdown sits to the left of the theme switch", async ({ page }) => {
     await page.goto("/");
     await page.locator(".section-grid").waitFor();
     const localeBox = await page.locator("#locale-switch").boundingBox();
