@@ -55,6 +55,40 @@ test.describe("i18n general namespace", () => {
     await ctx.close();
   });
 
+  test("locale toggle switches language and persists", async ({ browser }) => {
+    const ctx = await browser.newContext({ locale: "en-US" });
+    const page = await ctx.newPage();
+    await page.goto("/");
+    await page.locator(".section-grid").waitFor();
+
+    const en = page.locator('.locale-switch-option[data-locale="en"]');
+    const pt = page.locator('.locale-switch-option[data-locale="pt"]');
+    await expect(en).toHaveAttribute("aria-pressed", "true");
+    await expect(pt).toHaveAttribute("aria-pressed", "false");
+
+    await pt.click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "pt");
+    await expect(page.locator(".btn-credits")).toHaveText("Créditos");
+    await expect(pt).toHaveAttribute("aria-pressed", "true");
+    await expect(en).toHaveAttribute("aria-pressed", "false");
+
+    await page.reload();
+    await page.locator(".section-grid").waitFor();
+    await expect(page.locator("html")).toHaveAttribute("lang", "pt");
+    await expect(page.locator(".btn-credits")).toHaveText("Créditos");
+    await ctx.close();
+  });
+
+  test("locale toggle sits to the left of the theme switch", async ({ page }) => {
+    await page.goto("/");
+    await page.locator(".section-grid").waitFor();
+    const localeBox = await page.locator("#locale-switch").boundingBox();
+    const themeBox = await page.locator("#btn-theme").boundingBox();
+    expect(localeBox).not.toBeNull();
+    expect(themeBox).not.toBeNull();
+    expect(localeBox.x).toBeLessThan(themeBox.x);
+  });
+
   test("no leftover {key} placeholders on the page", async ({ page }) => {
     await page.goto("/");
     await page.locator(".section-grid").waitFor();
