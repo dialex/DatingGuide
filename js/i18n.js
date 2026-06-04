@@ -4,9 +4,15 @@
 
 // Single source of truth for languages. Each entry maps a locale code to the
 // flag emoji shown in the dropdown. Add a language here (plus its
-// i18n/<code>/*.js files) and it appears everywhere automatically.
+// i18n/<code>/*.js files) and it appears everywhere automatically. Keep the
+// list alphabetical by code. English (DEFAULT) is the fallback locale.
 export const LOCALES = {
+  de: "🇩🇪",
   en: "🇬🇧",
+  es: "🇪🇸",
+  fr: "🇫🇷",
+  hu: "🇭🇺",
+  it: "🇮🇹",
   pt: "🇵🇹",
 };
 const SUPPORTED = Object.keys(LOCALES);

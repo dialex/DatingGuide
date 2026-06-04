@@ -2,23 +2,27 @@
 
 Help translate the app into your language. No build step. Just edit files.
 
+Languages already included: 🇩🇪 de, 🇬🇧 en, 🇪🇸 es, 🇫🇷 fr, 🇭🇺 hu, 🇮🇹 it, 🇵🇹 pt.
+
 ## Add a new language
 
-Example: Spanish (`es`).
+Example: Dutch (`nl`).
 
-**1. Register it.** In `js/i18n.js`, add one line to `LOCALES` with the locale code and its flag emoji:
+**1. Register it.** In `js/i18n.js`, add one line to `LOCALES` with the locale code and its flag emoji. Keep the list alphabetical by code:
 
 ```js
 export const LOCALES = {
+  de: "🇩🇪",
   en: "🇬🇧",
+  // ...
+  nl: "🇳🇱",
   pt: "🇵🇹",
-  es: "🇪🇸",
 };
 ```
 
 That alone adds it to the dropdown.
 
-**2. Add the strings.** Copy `i18n/en/general.js` to `i18n/es/general.js`. Translate every value on the right. Keep the keys and any `{placeholders}` unchanged.
+**2. Add the strings.** Copy `i18n/en/general.js` to `i18n/nl/general.js`. Translate every value on the right. Keep the keys and any `{placeholders}` unchanged.
 
 ```js
 home: {
@@ -29,7 +33,7 @@ home: {
 **3. Cache it offline.** In `service-worker.js`, add your file to the `ASSETS` list:
 
 ```js
-"./i18n/es/general.js",
+"./i18n/nl/general.js",
 ```
 
 Done. Run `npm run dev`, open the app, pick your flag.
