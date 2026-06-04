@@ -13,6 +13,12 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 
+/* Timing tokens (theme-agnostic). --view-fade is read by app.js so the
+   page-fade duration has a single source of truth. */
+:root {
+  --view-fade: 170ms;
+}
+
 :root,
 html[data-theme="light"] {
   --primary: #e11d48;
@@ -894,7 +900,7 @@ body:not(.home) .install-banner {
 header,
 #main-content,
 footer {
-  transition: opacity 170ms ease;
+  transition: opacity var(--view-fade) ease;
 }
 body.view-fading header,
 body.view-fading #main-content,

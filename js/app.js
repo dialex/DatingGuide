@@ -238,7 +238,11 @@ function render() {
 // the background colour, swap the content while it is invisible, then fade back
 // in. Step→step navigation inside a section is handled by the swipe animation
 // and bypasses this entirely.
-const VIEW_FADE = 170; // must match the opacity transition in styles.css
+// Read from the --view-fade CSS token so the duration has a single source of
+// truth (styles.css). Falls back to 170 if the property is missing.
+const VIEW_FADE = parseFloat(
+  getComputedStyle(document.documentElement).getPropertyValue("--view-fade"),
+) || 170;
 let viewBusy = false;
 
 function prefersReducedMotion() {
