@@ -181,7 +181,12 @@ function renderSection() {
   $("btn-next-icon-check").style.display = isLast ? "" : "none";
 }
 
-async function renderCredits() {
+// Cached so renderCredits is synchronous — the crossfade needs the incoming
+// content present the instant it swaps, not after a fetch resolves. Preloaded
+// at startup (see bottom), so the cache is warm before the first visit.
+let creditsHtml = null;
+
+function renderCredits() {
   document.body.classList.remove("home", "wizard");
   document.body.classList.add("credits");
   $("home-header").style.display = "none";
@@ -191,8 +196,16 @@ async function renderCredits() {
   const main = $("main-content");
   main.classList.remove("home-view");
 
-  const html = await fetch("html/credits.html").then(r => r.text());
-  main.innerHTML = html;
+  if (creditsHtml != null) {
+    main.innerHTML = creditsHtml;
+  } else {
+    // Cold cache (fast click before preload finished): fetch, then fill in if
+    // the user is still on credits.
+    fetch("html/credits.html").then(r => r.text()).then(h => {
+      creditsHtml = h;
+      if (view === "credits") main.innerHTML = h;
+    });
+  }
 }
 
 function render() {
@@ -217,6 +230,39 @@ function render() {
     });
     setTimeout(() => peek.remove(), FADE_DURATION + 100);
   }
+}
+
+// --- View transitions ---
+//
+// Top-level view changes (home / section / credits) fade the whole page out to
+// the background colour, swap the content while it is invisible, then fade back
+// in. Step→step navigation inside a section is handled by the swipe animation
+// and bypasses this entirely.
+const VIEW_FADE = 170; // must match the opacity transition in styles.css
+let viewBusy = false;
+
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+// Fade the whole page out to the background colour, swap the content while it
+// is invisible, then fade it back in. Header, content and footer move as one.
+function renderEnter() {
+  if (prefersReducedMotion() || viewBusy) {
+    render();
+    window.scrollTo(0, 0);
+    return;
+  }
+  viewBusy = true;
+  const body = document.body;
+  body.classList.add("view-fading"); // fade the page out to the bg
+  setTimeout(() => {
+    render(); // swap while invisible
+    window.scrollTo(0, 0);
+    void body.offsetHeight; // commit before fading back in
+    requestAnimationFrame(() => body.classList.remove("view-fading"));
+    setTimeout(() => { viewBusy = false; }, VIEW_FADE + 60);
+  }, VIEW_FADE);
 }
 
 // --- Hash routing ---
@@ -290,7 +336,7 @@ function readHashIntoState() {
 // user landed via a bookmark or shared link.
 function applyHash() {
   readHashIntoState();
-  render();
+  render(); // first paint is plain — no fade-out flash of the initial markup
   window.scrollTo(0, 0);
 
   if (view === "home") {
@@ -324,9 +370,14 @@ function applyHash() {
 window.addEventListener("hashchange", () => {
   if (inPopState) return;
   if (location.hash.slice(1) === hashForState()) return;
+  const fromView = view;
   readHashIntoState();
-  render();
-  window.scrollTo(0, 0);
+  if (view !== fromView) {
+    renderEnter();
+  } else {
+    render();
+    window.scrollTo(0, 0);
+  }
   if (view === "section" && currentStep > 0) seedStepLadder();
 });
 
@@ -349,9 +400,14 @@ window.addEventListener("popstate", (e) => {
   if (inPopState) return;
   inPopState = true;
   try {
+    const fromView = view;
     readHashIntoState();
-    render();
-    window.scrollTo(0, 0);
+    if (view !== fromView) {
+      renderEnter();
+    } else {
+      render();
+      window.scrollTo(0, 0);
+    }
     const ours = e.state && typeof e.state.view === "string";
     if (!ours && view === "section" && currentStep > 0) {
       seedStepLadder();
@@ -381,8 +437,7 @@ function enterSection(id) {
   view = "section";
   currentSectionId = id;
   currentStep = 0;
-  render();
-  window.scrollTo(0, 0);
+  renderEnter();
   pushUrl();
 }
 
@@ -390,8 +445,7 @@ function goCredits() {
   view = "credits";
   currentSectionId = null;
   currentStep = 0;
-  render();
-  window.scrollTo(0, 0);
+  renderEnter();
   pushUrl();
 }
 
@@ -399,8 +453,7 @@ function goHome() {
   view = "home";
   currentSectionId = null;
   currentStep = 0;
-  render();
-  window.scrollTo(0, 0);
+  renderEnter();
   pushUrl();
 }
 
@@ -705,6 +758,9 @@ onLocaleChange(() => {
   document.title = t("general.meta.docTitle");
   render();
 });
+
+// Warm the credits cache so the first view swap has real content ready.
+fetch("html/credits.html").then(r => r.text()).then(h => { creditsHtml = h; }).catch(() => {});
 
 fetch("manifest.json")
   .then(r => r.json())

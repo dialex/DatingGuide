@@ -36,6 +36,7 @@ html[data-theme="light"] {
   --skeleton: rgba(0, 0, 0, 0.07);
   --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.06);
   --shadow-card-strong: 0 4px 20px rgba(0, 0, 0, 0.13);
+  --shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.18);
   --shadow-btn: 0 4px 14px rgba(0, 0, 0, 0.12);
   --shadow-chevron: 0 4px 14px rgba(0, 0, 0, 0.08);
   --radius: 16px;
@@ -65,6 +66,7 @@ html[data-theme="dark"] {
   --skeleton: rgba(255, 255, 255, 0.08);
   --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.35);
   --shadow-card-strong: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.6);
   --shadow-btn: 0 4px 14px rgba(0, 0, 0, 0.45);
   --shadow-chevron: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
@@ -861,6 +863,52 @@ body:not(.home) .install-banner {
   overflow: hidden;
   box-shadow: var(--shadow-card-strong);
   cursor: pointer;
+  /* Smooth settle back to rest when the pointer leaves. */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Fluid expand on hover, pointer devices only. The overshoot easing on the
+   grow gives the springy feel; the calmer ease on rest (above) avoids
+   dipping below the original size on the way out. */
+@media (hover: hover) and (pointer: fine) {
+  .section-card:hover {
+    transform: scale(1.04);
+    box-shadow: var(--shadow-card-hover);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.2s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-card,
+  .section-card:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ── View transitions (home ⇄ section ⇄ credits) ──
+   The whole page fades out to the background colour, swaps, then fades back
+   in — header (title), content and footer together as one unit. Driven by a
+   single class on <body>. The wizard step-swipe is untouched. */
+header,
+#main-content,
+footer {
+  transition: opacity 170ms ease;
+}
+body.view-fading header,
+body.view-fading #main-content,
+body.view-fading footer {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header,
+  #main-content,
+  footer { transition: none; }
+  body.view-fading header,
+  body.view-fading #main-content,
+  body.view-fading footer { opacity: 1; }
 }
 
 .section-card-image {
