@@ -77,14 +77,21 @@ test.describe("i18n general namespace", () => {
     await ctx.close();
   });
 
-  test("locale dropdown sits to the left of the theme switch", async ({ page }) => {
+  test("locale dropdown sits to the right of the Credits link", async ({ page }) => {
     await page.goto("/");
     await page.locator(".section-grid").waitFor();
     const localeBox = await page.locator("#locale-switch").boundingBox();
-    const themeBox = await page.locator("#btn-theme").boundingBox();
+    const creditsBox = await page.locator(".btn-credits").boundingBox();
     expect(localeBox).not.toBeNull();
-    expect(themeBox).not.toBeNull();
-    expect(localeBox.x).toBeLessThan(themeBox.x);
+    expect(creditsBox).not.toBeNull();
+    expect(localeBox.x).toBeGreaterThan(creditsBox.x);
+  });
+
+  test("locale options use country flag emoji", async ({ page }) => {
+    await page.goto("/");
+    await page.locator(".section-grid").waitFor();
+    await expect(page.locator(".locale-select option[value='en']")).toHaveText("🇬🇧");
+    await expect(page.locator(".locale-select option[value='pt']")).toHaveText("🇵🇹");
   });
 
   test("no leftover {key} placeholders on the page", async ({ page }) => {
