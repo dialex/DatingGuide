@@ -108,6 +108,29 @@ test.describe("i18n general namespace", () => {
     expect(optionValues).toEqual(supported);
   });
 
+  test("title refits to the new text right after switching language", async ({ browser }) => {
+    const ctx = await browser.newContext({ locale: "en-US" });
+    const page = await ctx.newPage();
+    await page.goto("/");
+    await page.locator(".section-grid").waitFor();
+
+    await page.locator(".locale-select").selectOption("hu");
+    await expect(page.locator("html")).toHaveAttribute("lang", "hu");
+
+    // The fitted title must not overflow its container. This polls only
+    // briefly, so it fails if the refit waits on an unrelated reflow.
+    await expect
+      .poll(
+        async () =>
+          page.locator(".title-word-dating").evaluate(
+            (el) => el.scrollWidth - el.parentElement.clientWidth,
+          ),
+        { timeout: 1000 },
+      )
+      .toBeLessThanOrEqual(1);
+    await ctx.close();
+  });
+
   test("no leftover {key} placeholders on the page", async ({ page }) => {
     await page.goto("/");
     await page.locator(".section-grid").waitFor();

@@ -89,6 +89,10 @@ function renderHome() {
   const banner = $("install-banner");
   main.replaceChildren(home);
   if (banner) main.appendChild(banner);
+
+  // Re-fit the title to the freshly rendered text (the locale may have changed
+  // its length). Wait one frame so the new nodes are laid out before measuring.
+  requestAnimationFrame(fitTitles);
 }
 
 function renderSection() {
@@ -753,3 +757,13 @@ if (document.fonts && document.fonts.ready) {
 } else {
   fitTitles();
 }
+
+// Re-fit on resize. A single listener that re-queries the live title nodes, so
+// it keeps working after the home view is re-rendered (e.g. locale switch).
+let lastFitResize = 0;
+window.addEventListener("resize", () => {
+  const now = Date.now();
+  if (now - lastFitResize < 50) return;
+  lastFitResize = now;
+  fitTitles();
+});
