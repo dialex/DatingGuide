@@ -94,6 +94,20 @@ test.describe("i18n general namespace", () => {
     await expect(page.locator(".locale-select option[value='pt']")).toHaveText("🇵🇹");
   });
 
+  test("locale options are derived from the supported locales", async ({ page }) => {
+    await page.goto("/");
+    await page.locator(".section-grid").waitFor();
+    // Options are rendered from i18n's LOCALES map, not hardcoded in the HTML.
+    const supported = await page.evaluate(async () => {
+      const m = await import("/js/i18n.js");
+      return m.supportedLocales();
+    });
+    const optionValues = await page
+      .locator(".locale-select option")
+      .evaluateAll((opts) => opts.map((o) => o.value));
+    expect(optionValues).toEqual(supported);
+  });
+
   test("no leftover {key} placeholders on the page", async ({ page }) => {
     await page.goto("/");
     await page.locator(".section-grid").waitFor();

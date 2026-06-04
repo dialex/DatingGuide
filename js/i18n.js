@@ -2,7 +2,14 @@
 // navigator.language > "en"); strings live under i18n/<locale>/<namespace>.js
 // and are flattened into a single dot-path dict for fast lookup.
 
-const SUPPORTED = ["en", "pt"];
+// Single source of truth for languages. Each entry maps a locale code to the
+// flag emoji shown in the dropdown. Add a language here (plus its
+// i18n/<code>/*.js files) and it appears everywhere automatically.
+export const LOCALES = {
+  en: "🇬🇧",
+  pt: "🇵🇹",
+};
+const SUPPORTED = Object.keys(LOCALES);
 const STORAGE_KEY = "locale";
 const DEFAULT = "en";
 const NAMESPACES = ["general", "intro", "meeting", "dating", "keeping", "credits", "install"];
@@ -76,6 +83,10 @@ export function getLocale() {
 
 export function supportedLocales() {
   return SUPPORTED.slice();
+}
+
+export function localeFlag(loc) {
+  return LOCALES[loc] || loc;
 }
 
 export async function setLocale(loc) {

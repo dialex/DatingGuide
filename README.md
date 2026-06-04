@@ -36,6 +36,10 @@ Then open http://localhost:3000/SomethingDating/ in your browser.
 | `npm run skills:update` | Update skills to latest versions |
 | `npm run audit` | Lighthouse PWA audit (requires `npm run dev` running) |
 
+## Translations
+
+Want to add or fix a language? See [TRANSLATIONS.md](TRANSLATIONS.md).
+
 ## Deploy
 
 Pushes to `main` auto-deploy to GitHub Pages via GitHub Actions.

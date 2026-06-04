@@ -11,6 +11,8 @@ import {
   getLocale,
   setLocale,
   onLocaleChange,
+  supportedLocales,
+  localeFlag,
 } from "./i18n.js";
 
 let view = "home";
@@ -51,9 +53,15 @@ function renderHome() {
     });
   }
 
-  // Reflect the active locale on the dropdown.
+  // Build the locale dropdown from i18n's LOCALES map, then select the active
+  // one. Adding a language to that map is all it takes to appear here.
   const localeSelect = home.querySelector(".locale-select");
-  if (localeSelect) localeSelect.value = getLocale();
+  if (localeSelect) {
+    localeSelect.innerHTML = supportedLocales()
+      .map((l) => `<option value="${l}">${localeFlag(l)}</option>`)
+      .join("");
+    localeSelect.value = getLocale();
+  }
 
   // Cards are declared statically in tpl-home (titles + images hardcoded).
   // Here we just wire each one to its phase data: gradient, steps count, click.

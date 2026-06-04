@@ -138,10 +138,8 @@
           </span>
         </button>
         <a href="#credits" class="btn-credits" data-i18n="general.home.credits">Credits</a>
-        <select class="locale-select" id="locale-switch" data-i18n-aria="general.aria.locale" aria-label="Change language">
-          <option value="en">🇬🇧</option>
-          <option value="pt">🇵🇹</option>
-        </select>
+        <!-- Options are rendered from i18n's LOCALES map in app.js. -->
+        <select class="locale-select" id="locale-switch" data-i18n-aria="general.aria.locale" aria-label="Change language"></select>
       </div>
       <div id="app-version" data-slot="version"></div>
     </div>
