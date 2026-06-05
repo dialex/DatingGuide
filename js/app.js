@@ -777,7 +777,21 @@ fetch("manifest.json")
   })
   .catch(() => {});
 
-if ("serviceWorker" in navigator) {
+// Skip the service worker on localhost so the dev server's live reload isn't
+// defeated by stale-while-revalidate caching. Unregister any SW a previous
+// session installed, and clear its caches.
+const isLocalhost = ["localhost", "127.0.0.1", "[::1]"].includes(
+  location.hostname,
+);
+
+if (isLocalhost && "serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((regs) => {
+    regs.forEach((reg) => reg.unregister());
+  });
+  if (window.caches) {
+    caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
+  }
+} else if ("serviceWorker" in navigator) {
   // Only reload if a controller was already active before this page load.
   // That means a NEW service worker took over an existing client — i.e. a
   // version upgrade. The first-ever install also fires controllerchange,
