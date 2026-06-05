@@ -139,31 +139,46 @@ export const dating = {
     },
     {
       id: "betweendates",
-      title: "Stay off the phone between dates",
-      description: "Don't contact them between dates except to set up the next one, which you'll do in 4–5 days.",
+      title: "Booking the next date",
+      description: "Don't contact them between dates except to set up the next one, which you'll do in 4 days. If they reach out first, forget the 4 days and invite them out right then. Their initiative is the signal.",
       extra: {
         title: "Tips",
         description: [
-          "If they reach out first, forget the 4–5 days and invite them out right then. Their initiative is the signal.",
-          "Use the phone for setting dates only, never chit chat.",
           "Save conversation topics for the date itself.",
-          "Romantic feelings grow face-to-face, not over the phone.",
+          "**Use the phone for setting dates only**, never chit chat, because romantic feelings cannot develop over the phone.",
         ],
       },
     },
     {
       id: "walkaway",
       title: "Walk away when it's not right",
-      description: "Tell minor annoyances apart from dealbreakers. Annoyances stack up, dealbreakers end things before they begin.",
+      description: `An **annoyance** is fine if it's not a dealbreaker for you, but remember they add up and can breed resentment.
+
+      A **dealbreaker** is an issue you can't get over. Don't try to ignore or rationalise it, just move on.
+
+      If they call or text afterwards, tell them a former long-term partner came back into your life.
+      `,
       extra: {
         title: "Tips",
         description: [
-          "A minor annoyance is fine if it's not a dealbreaker for you, but remember they add up and can breed resentment.",
-          "A dealbreaker is an issue you can't get over. Don't try to ignore or rationalise it.",
+          "Annoyances stack up, dealbreakers end things before they begin.",
           "If a dealbreaker surfaces on a date, stay calm and avoid drama. Finish the date, say goodbye politely, and move on.",
-          "If they call or text afterwards, tell them a former long-term partner came back into your life.",
         ],
       },
+    },
+    {
+      id: "ready",
+      title: "You're seeing each other",
+      description: `One number became a first date. One date became many.
+
+        You called, you planned, you showed up, and you kept the conversation going. Date after date, a **real connection** has been forming.
+
+        That's no small thing. Most people never get this far.
+
+        Now the goal shifts. From winning someone over, to **building something that lasts**.
+
+        Time to make it official.
+        `,
     },
   ],
 };
