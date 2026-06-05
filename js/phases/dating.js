@@ -169,9 +169,7 @@ export const dating = {
     {
       id: "ready",
       title: "You're seeing each other",
-      description: `One number became a first date. One date became many.
-
-        You called, you planned, you showed up, and you kept the conversation going. Date after date, a **real connection** has been forming.
+      description: `You called, you planned, you showed up, and you kept the conversation going. Date after date, a **true connection** was created.
 
         That's no small thing. Most people never get this far.
 
