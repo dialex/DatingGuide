@@ -7,37 +7,85 @@ export const keeping = {
     {
       id: "exclusive",
       title: "Become exclusive",
-      description: "When you're both clearly thinking about couple things, make it official.",
+      description: "Exclusivity usually happens naturally. You grow closer until you **only want to see each other and nobody else.**",
       extra: {
         title: "Tips",
         description: [
-          "The moment you become exclusive, stop seeing or contacting anyone else you were dating. No exceptions.",
+          "Your partner wants you to meet their parents.",
+          "Or bring you to \"couple things\" with friends.",
+          "If you only want something casual, make that clear as soon as possible so you don't waste their time.",
+        ],
+      },
+    },
+    {
+      id: "dropothers",
+      title: "Drop everyone else",
+      description: "The moment you become exclusive, stop seeing and contacting anyone else you were dating. **No exceptions.**",
+      extra: {
+        title: "Tips",
+        description: [
+          "If you only had a date or two, just stop contacting them.",
+          "If you dated more, tell them you enjoyed it but someone asked you to be exclusive and you accepted. Then don't contact them again.",
         ],
       },
     },
     {
       id: "keepdating",
-      title: "Keep dating each other",
-      description: "Go on a proper date at least once every 2–3 weeks, even deep into a relationship.",
+      title: "Keep the relationship alive",
+      description: "Relationships need **constant maintenance**, like a plant. Keep doing the things that made you fall for each other.",
       extra: {
         title: "Tips",
         description: [
-          "Don't let your grooming or dress slip just because you're comfortable.",
-          "Keep your most annoying habits away from your partner.",
-          "Speak up gently when something bothers you. Expect the same back.",
+          "Keep dating. Have casual, romantic fun together at least every 2–3 weeks.",
+          "Doesn't need to be expensive, just quality time that lets you bond.",
+          "You can relax around each other but don't go lazy.",
+          "Gently flag what bothers you and let your partner do the same.",
+        ],
+      },
+    },
+    {
+      id: "meetparents",
+      title: "Meet the parents",
+      description: "Meeting the parents means being seen as **someone who might join the family** one day. Behave accordingly.",
+      extra: {
+        title: "Tips",
+        description: [
+          "Dress up nicely.",
+          "Bring a small gift (ask your partner for advice).",
+          "Keep the mood positive. Be respectful.",
+          "Never get drawn into political debate.",
         ],
       },
     },
     {
       id: "livingtogether",
-      title: "Living together",
-      description: "Keep having proper date nights every 1–2 weeks, even at home.",
+      title: "Live together",
+      description: "Living together exposes you to each other's worst traits every day. It takes constant effort to **avoid becoming roommates.**",
       extra: {
         title: "Tips",
         description: [
-          "If you both work from home, get out of each other's space during the day.",
-          "Keep unpleasant habits to yourself.",
-          "Agree upfront on who does what around the house.",
+          "Discover what triggers your partner and avoid it.",
+          "Dedicate time from your routine to spend quality time.",
+          "Keep a private space of your own if you're home a lot.",
+          "Stay clean and tidy. Clean up after yourself.",
+          "Agree upfront on who does which chores and when. Be fair.",
+        ],
+      },
+    },
+    {
+      id: "arguments",
+      title: "Handle arguments",
+      description: `You can do your best to avoid it, but sooner or later the two of you will argue. You must remember to **never escalate.**
+
+      If you can't control your emotions, admit it to your partner and acknowledge the argument can't be defused in its current state, suggest a pause until you're both on a better mindset. Apologise and go out.`,
+      extra: {
+        title: "Tips",
+        description: [
+          "Stay calm and polite. Never yell.",
+          "Listen and try to understand before you share your perspective.",
+          "Hold your ground politely. Don't be dismissive or insulting.",
+          "To end a deadlock, say \"Let's agree to disagree.\"",
+          "Remember **you love this person** and chose to live with them.",
         ],
       },
     },
