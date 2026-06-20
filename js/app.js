@@ -830,9 +830,19 @@ if (isLocalhost && "serviceWorker" in navigator) {
   });
 }
 
-await initI18n();
+try {
+  await initI18n();
+} catch (_) {
+  // Fall through with an empty dictionary. Step content is baked-in English, so
+  // the page still works. Never leave it gated (booting) on an i18n failure.
+}
 document.title = t("general.meta.docTitle");
 applyHash();
+
+// The route is decided and the first view is painted, so reveal the page. Until
+// now the static home header was gated off (body.booting) to avoid flashing it
+// on a deep link while the i18n dictionary loaded.
+document.body.classList.remove("booting");
 
 // Fit the home title to its container so it never overflows on narrow viewports.
 // Wait for fonts to load first — measuring with the fallback font gives wrong widths.

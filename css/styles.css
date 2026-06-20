@@ -92,6 +92,16 @@ body.home {
   max-width: 960px;
 }
 
+/* Hide the static markup until the app has decided the route and painted the
+   first view. Otherwise a deep link (e.g. #keeping/1) flashes the home header
+   while the i18n dictionary is still loading. The html background still shows,
+   so the gap reads as a clean blank, not a missing page. */
+body.booting > header,
+body.booting > #main-content,
+body.booting > footer {
+  visibility: hidden;
+}
+
 /* ── Header ── */
 header {
   padding: 16px 20px 0;
