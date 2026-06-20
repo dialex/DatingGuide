@@ -1,4 +1,4 @@
-const CACHE_NAME = "something-dating-v1.5.3";
+const CACHE_NAME = "something-dating-v1.6.1";
 // Paths are relative to the service-worker location so they resolve
 // correctly under both the GitHub Pages scope (/SomethingDating/) and the
 // local dev server (/).
