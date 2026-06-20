@@ -138,3 +138,39 @@ test.describe("i18n general namespace", () => {
     expect(body).not.toMatch(/\{general\.[\w.]+\}/);
   });
 });
+
+test.describe("i18n phase content", () => {
+  test("translates home card titles for pt", async ({ browser }) => {
+    const ctx = await browser.newContext({ locale: "pt-PT" });
+    const page = await ctx.newPage();
+    await page.goto("/");
+    await page.locator(".section-grid").waitFor();
+    await expect(page.locator("#section-keeping .section-card-title")).toHaveText("Manter");
+    await expect(page.locator("#section-meeting .section-card-title")).toHaveText("Conhecer");
+    await ctx.close();
+  });
+
+  test("translates phase title, step title, description and tips for pt", async ({ browser }) => {
+    const ctx = await browser.newContext({ locale: "pt-PT" });
+    const page = await ctx.newPage();
+    await page.goto("/#keeping/1");
+    await page.locator(".wizard-step-card:not(.peek)").waitFor();
+    await expect(page.locator('[data-slot="phase-title"]')).toHaveText("Manter a relação");
+    await expect(page.locator('[data-slot="step-title"]')).toHaveText("Tornem-se exclusivos");
+    await expect(page.locator('[data-slot="step-description"]')).toContainText("exclusividade");
+    await expect(page.locator(".wizard-extra-list")).toContainText("conheças os pais");
+    await ctx.close();
+  });
+
+  test("falls back to English phase content for a locale without phase files", async ({ browser }) => {
+    // de has general.js but no phase files yet, so phase content stays English
+    // while the UI chrome is German.
+    const ctx = await browser.newContext({ locale: "de-DE" });
+    const page = await ctx.newPage();
+    await page.goto("/#keeping/1");
+    await page.locator(".wizard-step-card:not(.peek)").waitFor();
+    await expect(page.locator("html")).toHaveAttribute("lang", "de");
+    await expect(page.locator('[data-slot="step-title"]')).toHaveText("Become exclusive");
+    await ctx.close();
+  });
+});

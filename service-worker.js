@@ -1,4 +1,4 @@
-const CACHE_NAME = "something-dating-v1.6.1";
+const CACHE_NAME = "something-dating-v1.6.2";
 // Paths are relative to the service-worker location so they resolve
 // correctly under both the GitHub Pages scope (/SomethingDating/) and the
 // local dev server (/).
@@ -25,6 +25,10 @@ const ASSETS = [
   "./i18n/hu/general.js",
   "./i18n/it/general.js",
   "./i18n/pt/general.js",
+  "./i18n/pt/intro.js",
+  "./i18n/pt/meeting.js",
+  "./i18n/pt/dating.js",
+  "./i18n/pt/keeping.js",
   "./html/credits.html",
   "./html/install-ios.html",
   "./html/install-android.html",

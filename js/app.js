@@ -6,6 +6,7 @@ import { renderMarkdown, renderInlineMarkdown } from "./markdown.js";
 import {
   initI18n,
   t,
+  tx,
   tPlural,
   applyDom,
   getLocale,
@@ -81,6 +82,8 @@ function renderHome() {
         ? tPlural("general.home.steps", s.steps.length)
         : t("general.home.comingSoon");
     }
+    const titleEl = card.querySelector(".section-card-title");
+    if (titleEl) titleEl.textContent = tx(`${id}.cardTitle`, titleEl.textContent);
     card.addEventListener("click", () => enterSection(id));
   });
 
@@ -109,7 +112,7 @@ function renderSection() {
   if (!section.steps) {
     elWizardNav().style.display = "none";
     const wip = tpl("tpl-wip");
-    wip.querySelector('[data-slot="title"]').textContent = section.title;
+    wip.querySelector('[data-slot="title"]').textContent = tx(`${section.id}.title`, section.title);
     main.replaceChildren(wip);
     return;
   }
@@ -123,8 +126,12 @@ function renderSection() {
   const isLast = stepIdx === total - 1;
   const gradient = `linear-gradient(90deg, ${section.color[0]}, ${section.color[1]})`;
 
+  // Content keys are <sectionId>.<stepId>.<field>; each falls back to the
+  // baked-in English in the phase data, so a locale only translates what it has.
+  const base = `${section.id}.${step.id}`;
+
   const node = tpl("tpl-wizard-step");
-  node.querySelector('[data-slot="phase-title"]').textContent = section.title;
+  node.querySelector('[data-slot="phase-title"]').textContent = tx(`${section.id}.title`, section.title);
 
   // Step badge
   const badge = node.querySelector('[data-slot="step-badge"]');
@@ -132,10 +139,11 @@ function renderSection() {
   badge.textContent = t("general.wizard.stepOfTotal", { step: stepIdx + 1, total });
 
   // Step title + description
-  node.querySelector('[data-slot="step-title"]').textContent = step.title;
+  node.querySelector('[data-slot="step-title"]').textContent = tx(`${base}.title`, step.title);
   const desc = node.querySelector('[data-slot="step-description"]');
-  if (step.description) {
-    desc.innerHTML = renderMarkdown(step.description);
+  const description = tx(`${base}.description`, step.description);
+  if (description) {
+    desc.innerHTML = renderMarkdown(description);
     desc.hidden = false;
   }
 
@@ -143,9 +151,9 @@ function renderSection() {
   const extraSlot = node.querySelector('[data-slot="extra"]');
   if (step.extra) {
     const extra = tpl("tpl-wizard-extra");
-    extra.querySelector('[data-slot="title"]').textContent = step.extra.title;
+    extra.querySelector('[data-slot="title"]').textContent = tx(`${base}.extra.title`, step.extra.title);
     const body = extra.querySelector('[data-slot="body"]');
-    const extraDesc = step.extra.description;
+    const extraDesc = tx(`${base}.extra.tips`, step.extra.description);
     if (Array.isArray(extraDesc)) {
       const ul = document.createElement("ul");
       ul.className = "wizard-extra-list";

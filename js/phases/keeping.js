@@ -1,6 +1,6 @@
 export const keeping = {
   id: "keeping",
-  title: "Keeping",
+  title: "Nurture the relationship",
   color: ["#34d399", "#2dd4bf"],
   cover: "images/keeping.jpg",
   steps: [

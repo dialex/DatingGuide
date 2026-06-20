@@ -77,6 +77,15 @@ export function t(key, vars) {
   return s;
 }
 
+// Like t(), but for content that carries a baked-in English fallback (the phase
+// data in js/phases/*.js). Returns the translated value when the locale defines
+// it, otherwise the fallback. Works for strings and arrays (e.g. tip lists), so
+// a locale only needs to translate what it wants and English fills the rest.
+export function tx(key, fallback) {
+  const v = dict[key];
+  return v === undefined ? fallback : v;
+}
+
 // English-style cardinal pluralisation. Good enough until a locale needs more.
 export function tPlural(baseKey, count, vars) {
   const suffix = count === 1 ? "_one" : "_other";
