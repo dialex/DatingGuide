@@ -1,5 +1,5 @@
 import { sections } from "./workflow.js";
-import { setupInstallBanner } from "./install.js";
+import { setupInstallBanner, maybeShowInstallBanner } from "./install.js";
 import { setupThemeToggle } from "./theme.js";
 import { fitText } from "./fittext.js";
 import { renderMarkdown, renderInlineMarkdown } from "./markdown.js";
@@ -208,7 +208,21 @@ function renderCredits() {
   }
 }
 
+// Tracks the previously rendered view so we can tell a genuine arrival on the
+// home view apart from an in-place re-render (e.g. a locale change). The
+// install callout should only count true arrivals.
+let lastRenderedView = null;
+
 function render() {
+  const arrivingHome = view === "home" && lastRenderedView !== "home";
+
+  // renderHome relocates the install banner into #main-content, which the next
+  // section/credits render wipes. Park it back in <header> first so the node
+  // survives across views and can reappear on a later home visit.
+  const bannerEl = document.getElementById("install-banner");
+  const header = document.querySelector("header");
+  if (bannerEl && header) header.appendChild(bannerEl);
+
   if (view === "home") {
     renderHome();
   } else if (view === "credits") {
@@ -216,6 +230,9 @@ function render() {
   } else {
     renderSection();
   }
+
+  if (arrivingHome) maybeShowInstallBanner();
+  lastRenderedView = view;
 
   // After step→step swipes only: the previous peek-1 was lifted to <body>.
   // Fade it out to reveal the freshly rendered card behind.
