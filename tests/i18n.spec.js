@@ -162,14 +162,26 @@ test.describe("i18n phase content", () => {
     await ctx.close();
   });
 
-  test("falls back to English phase content for a locale without phase files", async ({ browser }) => {
-    // de has general.js but no phase files yet, so phase content stays English
-    // while the UI chrome is German.
-    const ctx = await browser.newContext({ locale: "de-DE" });
+  test("every supported locale translates phase content away from English", async ({ browser }) => {
+    for (const code of ["de", "es", "fr", "it", "hu"]) {
+      const ctx = await browser.newContext({ locale: `${code}-${code.toUpperCase()}` });
+      const page = await ctx.newPage();
+      await page.goto("/#keeping/1");
+      await page.locator(".wizard-step-card:not(.peek)").waitFor();
+      await expect(page.locator("html")).toHaveAttribute("lang", code);
+      const title = (await page.locator('[data-slot="step-title"]').innerText()).trim();
+      expect(title.length, `${code} step title should not be empty`).toBeGreaterThan(0);
+      expect(title, `${code} step title should be translated, not English`).not.toBe("Become exclusive");
+      await ctx.close();
+    }
+  });
+
+  test("English uses the baked-in phase data via fallback (no en phase files)", async ({ browser }) => {
+    const ctx = await browser.newContext({ locale: "en-US" });
     const page = await ctx.newPage();
     await page.goto("/#keeping/1");
     await page.locator(".wizard-step-card:not(.peek)").waitFor();
-    await expect(page.locator("html")).toHaveAttribute("lang", "de");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await expect(page.locator('[data-slot="step-title"]')).toHaveText("Become exclusive");
     await ctx.close();
   });

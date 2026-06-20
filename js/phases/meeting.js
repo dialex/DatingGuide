@@ -1,6 +1,6 @@
 export const meeting = {
   id: "meeting",
-  title: "Find someone worth your time",
+  title: "Find your match",
   color: ["#fbbf24", "#fb923c"],
   cover: "images/meeting.jpg",
   steps: [
